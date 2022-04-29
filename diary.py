@@ -13,8 +13,11 @@ from platform import system as op_sys
 #files,diary,info,pass,log - child folders
 #system('color b')
 
-def check_os():
-    return op_sys()
+def clear():
+    if op_sys() != 'Linux':
+	system('cls')
+    else:
+	system('clear')
 
 def linux_setup():
     system('mkdir .software/files')
@@ -39,7 +42,7 @@ def win_setup():#completed, working
     login()
 
 #def login():#completed, working
-    system('clear')
+    clear()
     print()
     print('[+] Login [+]')
     if exists('.software/log/a'):
@@ -57,10 +60,6 @@ def win_setup():#completed, working
         login()
 
 def main():#help option remaining
-    if op_sys() != 'Linux':
-	    system('cls')
-    else:
-        system('clear')
     print('''
 
     [1] Write Diary
@@ -104,7 +103,7 @@ def main():#help option remaining
         main()
 
 def write_diary():#completed,working
-    system('clear')
+    clear()
     print()
     print('[+] Start writing from here')
     print('[+] Date and time will be added automatically')
@@ -132,7 +131,7 @@ def write_diary():#completed,working
             break
         
         elif data=='!c':
-            system('clear')
+            clear()
 
         elif data=='':
             lst.append('\n')
@@ -141,7 +140,7 @@ def write_diary():#completed,working
             lst.append(data)
 
 def add_files():#completed,working
-    system('clear')
+    clear()
     print()
     task=input('[+] Add files or view files? [+] (add/view/delete) ')
     
@@ -193,7 +192,7 @@ def add_files():#completed,working
 
 def ppl_info():#completed,working
 
-    system('clear')
+    clear()
     print()
     task=input('[+] Add/modify/delete/view [+] (a/m/d/v)')
 
@@ -290,7 +289,7 @@ def ppl_info():#completed,working
 
 def passwords():#completed,working
 
-    system('clear')
+    clear()
     print()
     print('''
     [1] Enter passwords
@@ -340,7 +339,7 @@ def passwords():#completed,working
 
 def search():#completed,working
 
-    system('clear')
+    clear()
     print()
     search=input('[+] Enter the keyword to search [+] ')
     system('ls .software/diary>a')
@@ -415,7 +414,7 @@ def search():#completed,working
             input('press enter to continue')
 
 def read_diary():#completed,working
-    system('clear')
+    clear()
     print()
     print('''
     [1] Read diary of specific date

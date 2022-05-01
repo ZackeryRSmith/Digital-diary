@@ -15,11 +15,12 @@ from platform import system as op_sys
 
 def clear():
     if op_sys() != 'Linux':
-	system('cls')
+        system('cls')
     else:
-	system('clear')
+        system('clear')
 
 def linux_setup():
+    system("mkdir .software")
     system('mkdir .software/files')
     system('mkdir .software/diary')
     system('mkdir .software/info')
@@ -31,6 +32,7 @@ def linux_setup():
 
 
 def win_setup():#completed, working
+    system("mkdir software")
     system('mkdir software/files')
     system('mkdir software/diary')
     system('mkdir software/info')
@@ -41,7 +43,7 @@ def win_setup():#completed, working
     input('press enter to continue')
     login()
 
-#def login():#completed, working
+def login():#completed, working
     clear()
     print()
     print('[+] Login [+]')
@@ -455,4 +457,7 @@ def read_diary():#completed,working
 if exists('.software'):
     main()
 else:
-    setup()
+    if op_sys() != "Linux":
+        win_setup()
+    else:
+        linux_setup()

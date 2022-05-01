@@ -280,7 +280,6 @@ def passwords():
             input('[+] Credential deleted successfully [+]\npress enter to continue...')
             main()
         else:
-            print('[!] Credential name not found [!]')
             input('[!] Credential name not found [!]\npress enter to continue...')
             main()
 
@@ -290,21 +289,17 @@ def search():
     system('ls .software/diary>a')
     found=[]
 
-    print('[+] Searching for '+search+'...')
-    print('[+] This might take some time [+]')
+    print(f'[+] Searching for {search}...\n[+] This might take some time [+]')
 
     for i in open('a').read().split('\n'):
-        if i!='':
-            if search.lower() in open('.software/diary/'+i).read().lower(): found.append(i)
+        if i!='' and search.lower() in open('.software/diary/'+i).read().lower(): found.append(i)
         else: break
     system('rm a')
     print('[+] The word "'+search+'" was used on the dates shown below [+]')
     if len(found)!=0:
-        for i in found:
-                print(i)
+        for i in found: print(i)
     else:
-        print('[!] Word not found [!]')
-        input('press enter to continue')
+        input('[!] Word not found [!]\npress enter to continue...')
         main()
     
     while True:
@@ -313,28 +308,22 @@ def search():
 [2] Read all, export data to text file
 [3] Exit
         ''')
-        a=input('[+] ')
-
-        if a=='1':
+        if a := input('[+] ')=='1':
             inp=input('[+] Enter the date [+] ')
             if inp in found:
-                for i in open('.software/diary/'+inp).readlines():
-                    print(i)
+                for i in open('.software/diary/'+inp).readlines(): print(i)
                 a=input('[+] Export data to text file? [+] (y/n) ')
                 if a=='y':
                     system('cp .software/diary/'+inp+' '+input('[+] Enter location to export the file [+] '+'.txt'))
-                    print('[+] File exported [+]')
-                    input('press enter to continue')
+                    input('[+] File exported [+]\npress enter to continue...')
                     main()
                 elif a=='n':
                     pass
                 else:
-                    print('[+] Invalid, defaulting to option no [+]')
-                    input('press enter to continue')
+                    input('[+] Invalid, defaulting to option no [+]\npress enter to continue...')
                     main()
             else:
-                print('[+] Please enter the date from the list [+]')
-                input('press enter to continue')
+                input('[+] Please enter the date from the list [+]\npress enter to continue...')
 
         elif a=='2':
             print('[+] Exporting data to tar zip file...')
@@ -344,57 +333,49 @@ def search():
             system('tar -cf diary_search_results.tar /tmp/diary')
             system('mv diary_search_results.tar '+input('[+] Enter the location to export the file [+] '))
             system('rmdir /tmp/diary /s /q')
-            print('[+] File copied to specified directory [+]')
-            input('press enter to continue')
+            input('[+] File copied to specified directory [+]\npress enter to continue...')
             main()
 
         elif a=='3':
             main()
 
         else:
-            print('[!] Invalid Option [!]')
-            input('press enter to continue')
+            input('[!] Invalid Option [!]\npress enter to continue...')
 
-def read_diary():#completed,working
+def read_diary():
     clear()
-    print()
     print('''
-    [1] Read diary of specific date
-    [2] Read complete diary, export diary to tar file
-    [3] Exit
-    ''')
+[1] Read diary of specific date
+[2] Read complete diary, export diary to tar file
+[3] Exit
+          ''')
 
-    a=input('[+] ')
-    if a=='1':
+    if a:= input('[+] ') =='1':
         a=input('[+] Enter the date, ex-2022-01-24 [+]')
         if exists('.software/diary/'+a):
-            for i in open('.software/diary/'+a).readlines():
-                print(i)
-            if input('[+] Export diary to text file? [+] (y/n) ')=='y':
+            for i in open('.software/diary/'+a).readlines(): print(i)
+            if input('[+] Export diary to text file? [+] (y/n) ').lower()=='y':
                 system('cp software/diary/'+a+' '+input('[+] Enter the complete location to export file with / [+]')+a+'.txt')
-                print('[+] File exported successfully [+]')
-                input('press enter to continue')
+                input('[+] File exported successfully [+]\npress enter to continue...')
                 main()
-            else:
-                main()
+            else: main()
         else:
-            print('[+] Doesnt exist, maybe diary wasnt written on '+a)
-            input('press enter to continue')
+            input(f'[+] Doesnt exist, maybe diary wasnt written on {a}\npress enter to continue...')
             main()
     elif a=='2':
              system('tar -cf diary.tar .software/diary')
              system('mv diary.tar '+input('[+] Enter the location to export file [+]'))
-             print('[+] Diary exported successfully [+]')
-             input('press enter to continue')
+             input('[+] Diary exported successfully [+]\npress enter to continue...')
              main()
-    elif a=='3':
-        main()
+    elif a=='3':main()
     else:
-        print('[!] Invalid option [!]')
-        input('press enter to continue')
+        input('[!] Invalid option [!]\npress enter to continue...')
         read_diary()
 
 if exists('.software'):
     main()
 else:
-    setup()
+    if op_sys != "Linux":
+        win_setup()
+    else:
+        linux_setup()

@@ -1,5 +1,3 @@
-## Working on cleaning up the code (stay tuned) :)
-
 # Digital-diary
 terminal based diary software 
 

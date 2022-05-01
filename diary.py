@@ -2,64 +2,37 @@
 
 from os import system
 from os.path import exists
+from os import name as op_sys
 from datetime import datetime
 from sys import exit
-from platform import system as op_sys
-#from cryptography.fernet import Fernet
-
-#key=b'QP0F9hkybntvrxd5GWWwniUHvBeMydSQ5Lyy_cmfAHE='
-
-#software - root folders
-#files,diary,info,pass,log - child folders
-#system('color b')
 
 def clear():
-    if op_sys() != 'Linux':
-	system('cls')
-    else:
-	system('clear')
+    if op_sys == 'nt': system('cls')
+    else: system('clear')
 
 def linux_setup():
-    system('mkdir .software/files')
-    system('mkdir .software/diary')
-    system('mkdir .software/info')
-    system('mkdir .software/pass')
-    system('mkdir .software/log')
-    print('[+] Setup done [+]')
-    input('press enter to continue')
+    system('mkdir .software/files .software/diary .software/info .software/pass .software/log')
+    input('[+] Setup done [+]\npress enter to continue...')
     login()
 
 
-def win_setup():#completed, working
-    system('mkdir software/files')
-    system('mkdir software/diary')
-    system('mkdir software/info')
-    system('mkdir software/pass')
-    system('mkdir software/log')
+def win_setup():
+    system('mkdir software/files software/diary software/info software/pass software/log')
     system('attrib +h software')
-    print('[+] Setup done [+]')
-    input('press enter to continue')
-    login()
+    input('[+] Setup done [+]\npress enter to continue...'); login()
 
-#def login():#completed, working
+def login():
     clear()
-    print()
-    print('[+] Login [+]')
+    print('\n[+] Login [+]')
     if exists('.software/log/a'):
-        if input()==open('.software/log/a','r').read():
-            main()
-        else:
-            print('[!] Invalid password [!]')
-            input('press enter to continue')
-            login()
+        if input()==open('.software/log/a','r').read(): main()
+        else: input('[!] Invalid password [!]\npress enter to continue...'); login()
     else:
-        print()
-        open('.software/log/a','w').write(input('[+] Create a password to procede [+]'))
-        print('[+] Password created [+]')
-        input('press enter to continue')
-        login()
+        open('.software/log/a','w').write(input('\n[+] Create a password to proceed [+]'))
+        input('[+] Password created [+]\npress enter to continue..'); login()
 
-def main():#help option remaining
+def main():
+    # TODO: Add help option
     print('''
 
     [1] Write Diary
@@ -75,87 +48,61 @@ def main():#help option remaining
     ''')
 
     task=input('[+] Enter option ')
-    if task=='1':
-        write_diary()
-    elif task=='2':
-        read_diary()
-    elif task=='3':
-        add_files()
-    elif task=='4':
-        ppl_info()
-    elif task=='5':
-        passwords()
-    elif task=='6':
-        search()
-    elif task=='7':
-        print()
-        open('.software/log/a','w').write(input('[+] Enter new password [+] '))
-        print('[+] Password updated [+]')
-        input('press enter to continue')
-        main()
-    #elif task=='8':
-        #program_help()
-    elif task=='9':
-        exit()
-    else:
-        print('[!] Invalid option [!]')
-        input('press enter to continue')
-        main()
+    if   task=='1' : write_diary()
+    elif task=='2' : read_diary()
+    elif task=='3' : add_files()
+    elif task=='4' : ppl_info()
+    elif task=='5' : passwords()
+    elif task=='6' : search()
+    elif task=='7' : 
+        open('.software/log/a','w').write(input('\n[+] Enter new password [+] '))
+        input('[+] Password updated [+]\npress enter to continue'); main()
+    #elif task=='8': program_help()
+    elif task=='9' : exit()
+    else: input('[!] Invalid option [!]\npress enter to continue'); main()
 
 def write_diary():#completed,working
     clear()
-    print()
-    print('[+] Start writing from here')
-    print('[+] Date and time will be added automatically')
-    #print('[+] To add inline attachments, type <file path>. Exapmle- The attachment can be found here, <C:\file.txt>')
-    print('[+] To clear the screen, type "!c" on a new line')
-    print('[+] To stop writing, type "!e" on a new line')
-    print()
+    print( '''
+[+] Start writing from here
+[+] Date and time will be added automatically
+print('[+] To clear the screen, type "!c" on a new line')
+print('[+] To stop writing, type "!e" on a new line')
+           ''')
 
     lst=[]
     date_today=str(datetime.today())[:10]
-    time_at_the_start_of_writing=str(datetime.today())[11:19]
+    time_at_the_start_of_writing=str(datetime.today())[11:19]  # Bad variable naming.
 
     while True:
         data=input()
         if data=='!e':
-            print()
-            print('[+] File ended')
+            print('\n[+] File ended [+]')
             lst.append('\n')
             lst.insert(0,time_at_the_start_of_writing+'\n')
             open('.software/diary/'+date_today,'a').writelines(lst)
             
-            print('[+] Data added successfully')
-            input('press enter to continue')
-            main()
-            break
+            input('[+] Data added successfully [+]\npress enter to continue..')
+            main(); break
         
-        elif data=='!c':
-            clear()
+        elif data=='!c': clear()
+        elif data=='': lst.append('\n')
+        else: lst.append(data)
 
-        elif data=='':
-            lst.append('\n')
-        
-        else:
-            lst.append(data)
-
-def add_files():#completed,working
+def add_files():
     clear()
-    print()
-    task=input('[+] Add files or view files? [+] (add/view/delete) ')
+    task=input('\n[+] Add files or view files? [+] (add/view/delete) ')
     
     if task=='add':
-        loca=input('[+] Enter the location of the file [+] ')
+        path=input('[+] Enter the path to the file [+] ')
         
-        if exists(loca):
-            command=''.join(['cp ',loca,' software/files/'])
-            system(command)
-            print('[+] Files added successfully')
-            input('press enter to continue')
+        if exists(path):
+            command=''.join(['cp ',path,' software/files/'])
+            system(f'cp {command}software/files/')
+            input('[+] Files added successfully [+]\npress enter to continue...')
             main()
         else:
-            print('[!] File not found [!]')
-            input('press enter to continue')
+            input('[!] File not found [!]\npress enter to continue...')
             main()
 
     elif task=='view':
@@ -163,78 +110,92 @@ def add_files():#completed,working
             search=input('[+] Enter the name of the file, or type "list" to see all files, !e to exit [+] ')
             if search=='list':
                 system('ls .software/files')
-                input('press enter to continue')
-            elif search=='!e':
-                main()
+                input('press enter to continue...')
+            elif search=='!e': main()
             elif search!='list':
                 if exists('.software/files/'+search):
                     system('firefox --private-window .software/files/'+search)
-                    input('press enter to continue')
+                    input('press enter to continue...')
                     main()
-                else:
-                    print('[!] File not found [!]')
+                else: print('[!] File not found [!]')
 
     elif task=='delete':
         a=input('[+] Enter the file name to delete [+] ')
         if exists('.software/files/'+a):
             system('rm software/files/'+a)
-            print('[+] File deleted successfully [+]')
-            input('press enter to continue')
+            input('[+] File deleted successfully [+]\npress enter to continue...')
             main()
         else:
-            print('[+] File not found [+]')
-            input('press enter to continue')
+            input('[+] File not found [+]\npress enter to continue...')
             main()
     else:
-        print('[!] Invalid option [!]')
-        input('press enter to continue')
+        input('[!] Invalid option [!]\npress enter to continue...')
         add_files()
 
-def ppl_info():#completed,working
-
+def ppl_info():
     clear()
-    print()
-    task=input('[+] Add/modify/delete/view [+] (a/m/d/v)')
+    task=input('\n[+] Add/modify/delete/view [+] (a/m/d/v)')
 
     if task=='a':
-        name=input('[+] Enter name [+] ')
-        DOB=input('[+] Enter date of birth [+] ')
-        IG=input('[+] User on instagram? If yes enter ID, else leave blank [+]')
-        FB=input('[+] User on facebook? If yes enter ID, else leave blank [+]')
-        PN=input('[+] User on pinterest? If yes enter ID, else leave blank [+]')
-        LN=input('[+] User on linkedin? If yes enter ID, else leave blank [+]')
-        SC=input('[+] User on snapchat? If yes enter ID, else leave blank [+]')
-        M=input('[+] User on Mail? If yes enter ID, else leave blank [+]')
-        PHN=input('[+] Enter the phone number, else leave blank [+]')
-        IP=input('[+] Enter the IP address, else leave blank [+]')
-        note=input('[+] Extra details, else leave blank [+]')
+        name = input('[+] Enter name [+] ')
+        DOB  = input('[+] Enter date of birth [+] ')
+        IG   = input('[+] User on instagram? If yes enter ID, else leave blank [+]')
+        FB   = input('[+] User on facebook? If yes enter ID, else leave blank [+]')
+        PN   = input('[+] User on pinterest? If yes enter ID, else leave blank [+]')
+        LN   = input('[+] User on linkedin? If yes enter ID, else leave blank [+]')
+        SC   = input('[+] User on snapchat? If yes enter ID, else leave blank [+]')
+        M    = input('[+] User on Mail? If yes enter ID, else leave blank [+]')
+        PHN  = input('[+] Enter the phone number, else leave blank [+]')
+        IP   = input('[+] Enter the IP address, else leave blank [+]')
+        note = input('[+] Extra details, else leave blank [+]')
         
-        lst=['NAME: '+name,'DATE OF BIRTH: '+DOB,'INSTAGRAM: '+IG,'FACEBOOK: '+FB,'PINTEREST: '+PN,'LINKEDIN: '+LN,'SNAPCHAT: '+SC,'MAIL: '+M,'PHONE NUMBER: '+PHN,'IP ADDRESS: '+IP,'NOTES: '+note]
-        a=open('.software/info/'+name,'w')
-        for i in lst:
-            a.write(i+'\n')
-        a.close()
+        lst=[
+            'NAME: '          + name ,
+            'DATE OF BIRTH: ' + DOB  ,
+            'INSTAGRAM: '     + IG   ,
+            'FACEBOOK: '      + FB   ,
+            'PINTEREST: '     + PN   ,
+            'LINKEDIN: '      + LN   ,
+            'SNAPCHAT: '      + SC   ,
+            'MAIL: '          + M    ,
+            'PHONE NUMBER: '  + PHN  ,
+            'IP ADDRESS: '    + IP   ,
+            'NOTES: '         + note
+        ]
+        with open('.software/info/'+name,'w') as f:
+            for i in lst: f.write(i+'\n')
 
-        print('[+] Data added successfully [+]')
-        input('press enter to continue')
+        input('[+] Data added successfully [+]\npress enter to continue...')
         main()
 
     elif task=='m':
         name=input('[+] Enter the name to edit [+] ')
 
         if exists('.software/info/'+name):
-            DOB=input('[+] Edit date of birth leave blank to leave it unmodified [+] ')
-            IG=input('[+] Edit instagram? leave blank to leave it unmodified [+]')
-            FB=input('[+] Edit facebook? leave blank to leave it unmodified [+]')
-            PN=input('[+] Edit pinterest? leave blank to leave it unmodified [+]')
-            LN=input('[+] Edit linkedin? If yes enter ID, else leave blank [+]')
-            SC=input('[+] Edit snapchat? If yes enter ID, else leave blank [+]')
-            M=input('[+] Edit Mail? If yes enter ID, else leave blank [+]')
-            PHN=input('[+] Edit phone number leave blank to leave it unmodified [+]')
-            IP=input('[+] Edit IP address, else leave blank to leave it unmodified [+]')
-            note=input('[+] Extra details, else leave blank to leave it unmodified [+]')
+            DOB  = input('[+] Edit date of birth leave blank to leave it unmodified [+] ')
+            IG   = input('[+] Edit instagram? leave blank to leave it unmodified [+]')
+            FB   = input('[+] Edit facebook? leave blank to leave it unmodified [+]')
+            PN   = input('[+] Edit pinterest? leave blank to leave it unmodified [+]')
+            LN   = input('[+] Edit linkedin? If yes enter ID, else leave blank [+]')
+            SC   = input('[+] Edit snapchat? If yes enter ID, else leave blank [+]')
+            M    = input('[+] Edit Mail? If yes enter ID, else leave blank [+]')
+            PHN  = input('[+] Edit phone number leave blank to leave it unmodified [+]')
+            IP   = input('[+] Edit IP address, else leave blank to leave it unmodified [+]')
+            note = input('[+] Extra details, else leave blank to leave it unmodified [+]')
 
-            lst=['NAME: '+name,'DATE OF BIRTH: '+DOB,'INSTAGRAM: '+IG,'FACEBOOK: '+FB,'PINTEREST: '+PN,'LINKEDIN: '+LN,'SNAPCHAT: '+SC,'MAIL: '+M,'PHONE NUMBER: '+PHN,'IP ADDRESS: '+IP,'NOTES: '+note]
+            lst=[
+                'NAME: '          + name ,
+                'DATE OF BIRTH: ' + DOB  ,
+                'INSTAGRAM: '     + IG   ,
+                'FACEBOOK: '      + FB   ,
+                'PINTEREST: '     + PN   ,
+                'LINKEDIN: '      + LN   ,
+                'SNAPCHAT: '      + SC   ,
+                'MAIL: '          + M    ,
+                'PHONE NUMBER: '  + PHN  ,
+                'IP ADDRESS: '    + IP   ,
+                'NOTES: '         + note
+            ]
             
             b=open('.software/info/'+name,'r').readlines()
             
@@ -244,30 +205,24 @@ def ppl_info():#completed,working
                     b.pop(num)
                     b.insert(num,i)
             
-            a=open('.software/info/'+name,'w')
-            for i in b:
-                a.write(i+'\n')
-            a.close()
+            with open('.software/info/'+name,'w') as f:
+                for i in b: f.write(i+'\n')
 
-            print('[+] Information edited successfully')
-            input('press enter to continue')
+            input('[+] Information edited successfully [+]\npress enter to continue...')
             main()
 
         else:
-            print('[!] Name not found [!]')
-            input('press enter to continue')
+            input('[!] Name not found [!]\npress enter to continue...')
             main()
 
     elif task=='d':
         name=input('[+] Enter the name to delete [+] ')
         if exists('software/info/'+name):
             system('rm ".software/info/'+name+'"')
-            print('[+] Deleted successfully [+]')
-            input('press enter to continue')
+            input('[+] Deleted successfully [+]\npress enter to continue...')
             main()
         else:
-            print('[!] Not found [!]')
-            input('press enter to continue')
+            input('[!] Not found [!]\npress enter to continue...')
             main()
     
     elif task=='v':
@@ -278,19 +233,15 @@ def ppl_info():#completed,working
                 input('press enter to continue')
             else:
                 if exists('.software/info/'+name):
-                    for i in open('.software/info/'+name).readlines():
-                        print(i)
+                    for i in open('.software/info/'+name).readlines(): print(i)
                     input('press enter to continue')
                     main()
                 else:
-                    print('[!] Name does not exist [!]')
-                    input('press enter to continue')
+                    input('[!] Name does not exist [!]\npress enter to continue...')
                     main()
 
-def passwords():#completed,working
-
+def passwords():
     clear()
-    print()
     print('''
     [1] Enter passwords
     [2] View passwords
@@ -304,8 +255,7 @@ def passwords():#completed,working
         password=input('[+] Enter password [+] ')
         name=input('[+] Name of the credentials [+]')
         open('.software/pass/'+name,'w').writelines(['USERNAME:'+username,'\nPASSWORD: '+password])
-        print('[+] Credentials added successfully [+]')
-        input('press enter to continue')
+        input('[+] Credentials added successfully [+]\npress enter to continue...')
         main()
     
     if task=='2':
@@ -316,45 +266,37 @@ def passwords():#completed,working
                 system('ls .software/pass/')
                 input('press enter to continue')
             elif exists('software/pass/'+name):
-                for i in open('.software/pass/'+name).readlines():
-                    print(i)
+                for i in open('.software/pass/'+name).readlines(): print(i)
                 input('press enter to continue')
                 main()
             else:
-                print('[!] Name does not exist [!]')
-                input('press enter to continue')
+                input('[!] Name does not exsit [!]\npress enter to continue...')
                 main()
     
     if task=='3':
         name=input('[+] Enter the credential name to delete [+] ')
         if exists('.software/pass/'+name):
             system('rm .software/pass/'+name)
-            print('[+] Credential deleted successfully [+]]')
-            input('press enter to continue')
+            input('[+] Credential deleted successfully [+]\npress enter to continue...')
             main()
         else:
             print('[!] Credential name not found [!]')
-            input('press enter to continue')
+            input('[!] Credential name not found [!]\npress enter to continue...')
             main()
 
-def search():#completed,working
-
+def search():
     clear()
-    print()
     search=input('[+] Enter the keyword to search [+] ')
     system('ls .software/diary>a')
     found=[]
 
     print('[+] Searching for '+search+'...')
     print('[+] This might take some time [+]')
-    print()
 
     for i in open('a').read().split('\n'):
         if i!='':
-            if search.lower() in open('.software/diary/'+i).read().lower():
-                found.append(i)
-        else:
-            break
+            if search.lower() in open('.software/diary/'+i).read().lower(): found.append(i)
+        else: break
     system('rm a')
     print('[+] The word "'+search+'" was used on the dates shown below [+]')
     if len(found)!=0:

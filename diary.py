@@ -11,13 +11,13 @@ def clear():
     else: system('clear')
 
 def linux_setup():
-    system('mkdir .software/files .software/diary .software/info .software/pass .software/log')
+    system('mkdir .software .software/files .software/diary .software/info .software/pass .software/log')
     input('[+] Setup done [+]\npress enter to continue...')
     login()
 
 
 def win_setup():
-    system('mkdir software/files software/diary software/info software/pass software/log')
+    system('mkdir software software/files software/diary software/info software/pass software/log')
     system('attrib +h software')
     input('[+] Setup done [+]\npress enter to continue...'); login()
 

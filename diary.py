@@ -375,7 +375,7 @@ def read_diary():
 if exists('.software'):
     main()
 else:
-    if op_sys != "Linux":
+    if op_sys == "nt":
         win_setup()
     else:
         linux_setup()
